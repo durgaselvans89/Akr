@@ -1,0 +1,260 @@
+ABR	Ambur
+ACT	Arcot
+ADPT	Andipatti
+AKM	Arackkonam
+ALW	Alwaye
+ANI	Arani
+APT	Aruppukottai
+ASD	Ambasamudram
+ASI	Avinashi
+ASK	Arisikere
+ATL	Attingal
+ATU	Attur
+AYR	Ariyalur
+BGM	Belgaum
+BGR	Bargur
+BLAR	Bangalore Avenue Road
+BLBS	Bangalore Bommachandra
+BLCP	Bangalore Chamarajpet
+BLKP	Bangalore Kamatchipalaya
+BLRN	Bangalore Rajaji Nagar
+BLRP	Bangalore Peenya
+BLSP	Bangalore Sultanpet
+BLTR	Bangalore TR
+BLWF	Bangalore WhiteField
+BRV	Bhadravathi
+BVGI	Bhuvanagiri
+BVN	Bhavani
+CBCP	Coimbatore Chinniyampalayam
+CBEE	Coimbatore East
+CBEG	Coimbatore Ganapathy
+CBEK	Coimbatore Kurichi
+CBEM	Coimbatore Kavundampalayam
+CBEP	Coimbatore Pappanaickenpalayam
+CBES	Coimbatore Singanallur
+CBET	Coimbatore Town
+CBEV	Coimbatore Velandipalayam
+CBKT	Coimbatore Kattoor
+CBM	Cambam
+CBRS	Coimbatore RS Puram
+CBTL	Coimbatore Thudiyalur
+CBTR	Coimbatore TR
+CDM	Chidambaram
+CGL	Chengalpet
+CHML	Chennimalai
+CIAB	Chennai Ambathur
+CIAD	Chennai Avadi
+CIAK	Chennai Aminijikarai
+CIAN	Chennai AnnaNagar
+CIEK	Chennai Ekkattuthangal
+CIGY	Chennai Gunidy
+CIKB	Chennai Koiyambedu
+CIMK	Chennai Moolakadai
+CIMM	Chennai Madhavaram
+CIMY	Chennai Mylapore
+CIOW	Chennai Old Washermenpet
+CIPC	Chennai Parrys Corner
+CIPG	Chennai Perungudi
+CIPM	Chennai Poonthamallee
+CIPR	Chennai Porur
+CIPW	Chennai Purasaiwakkam
+CIRH	Chennai Red Hills
+CITL	Chennai Thousand Lights
+CITM	Chennai Thiruvanmiyur
+CITN	Chennai T.Nagar
+CITR	Chennai TR
+CIVP	Chennai Vadapalani
+CIVW	Chennai Villiwakkam
+CKM	Chengam
+CLT	Calicut
+CNP	Chinnalapatty
+CNR	Coonoor
+CRL	Chirala
+CRPT	Chathirapatti
+CRY	Changanacherry
+CSM	Chinnasalem
+CTR	Chittoor
+CUD	Cuddalore
+CVP	Covilpatti
+CYR	Cheyyar
+DGL	Dindigul
+DRP	Dharmapuri
+DVPM	Dhalavaipuram
+EDPM	Pallipalayam
+EDTR	Erode TR
+ERDN	Erode North
+ERDS	Erode South
+ERN	Ernakulam
+ERNM	Ernakulam Market
+ERNS	Ernakulam South
+ETMR	Ettumanoor
+FRK	Feroke
+GCT	Gopichettipalayam
+GDL	Gudalore
+GGE	Gingee
+GNT	Guntur
+GYM	Gudiyatham
+HAS	Hassan
+HBI	Hubli
+HSR	Hosur
+HYBN	Hyderabad Bala Nagar
+HYCP	Hyderabad Cheralapalli
+HYJM	Hyderabad Jeedi Metla
+HYPG	Hyderabad Patheragatti
+HYTR	Hyderabad TR
+IDP	Idapaddi
+JKM	Jayamkondam
+JKPM	Jalakandapuram
+KCPM	Kanchipuram
+KDNL	Kadaiyanallur
+KGM	Kangayam
+KJKD	Kanjikode
+KJPD	Kurunjipadi
+KKDI	Karaikudi
+KKM	Kayankulam
+KLKI	Kallakurichi
+KLT	Kulithalai
+KMUT	Kumbakonam Town
+KNR	Kannnanur
+KPDI	Katpadi
+KPM	Komarapalayam
+KRG	Krishnagiri
+KRKL	Karaikkal
+KRR	Karur
+KRTR	Karur TR
+KTKL	Kottakkal
+KTPI	Kuthampally
+KTRA	Kundra
+KTYM	Kottayam
+KVLI	Kavali
+MDA	Mandiya
+MDJP	Madurai Jaihind puram
+MDKK	Madurai KKNagar
+MDTN	Madurai Thirunagar
+MDTR	Madurai TR
+MDUB	Madurai BypassRoad
+MDUN	Madurai North
+MDUR	Madurai Ramnad
+MDUT	Madurai Town
+MDUW	Madurai West
+MJR	Manjeri
+MMNR	Maraimalai Nagar
+MNGD	Mannargudi
+MPI	Manapparai
+MTKM	Maduranthakam
+MTM	Marthandam
+MTPC	Mettupalayam
+MVK	Mavelikara
+MYD	Mayiladuthurai
+MYS	Mysore
+NGKV	Nagarcoil Vadacherry
+NGPT	Nagapattinam
+NGR	Nagari
+NKL	Namakkal
+NLR	Nellore
+NVL	Neyveli
+ODC	Oddanchattram
+OGL	Ongole
+OTY	Ooty
+PBLR	Perambalur
+PDKT	Pudukottai
+PDTB	Pondy Thirubuvanai
+PDYM	Pondy Mettupalayam
+PDYT	Pondy Town
+PDYTR	Pondicherry TR
+PDYV	Pondy Villiyanur
+PGT	Palaghat
+PKTI	Pattukottai
+PLC	Pollachi
+PLMR	Palmanar
+PLNI	Palani
+PLR	Polur
+PMK	Paramakudi
+PMNA	Perintalmanna
+PMPT	Perunampet
+PPKM	Panappakkam
+PPR	Pudhiyampudur
+PRDI	Perundurai
+PRT	Panrutti
+PVR	Perumbavoor
+QLN	Quilon
+RJPM	Rajapalayam
+RMD	Ramanathapuram
+RPT	Ranipet
+RSPM	Rasipuram
+SCD	Secundrabad
+SGR	Sholinghur
+SKPM	Sankarapuram
+SLAP	Salem Ammapet
+SLFR	Salem FiveRoads
+SLGI	Salem Gugai
+SLME	Salem Elampillai
+SLNB	Salem NewBusstand
+SLOB	Salem OldBusstand
+SLST	Salem Shevapet
+SLTB	Salem Thiruvakavundanur
+SLTR	Salem TR
+SMG	Shimoga
+SMNR	Somanur
+SNKL	Sankarankoil
+SPR	Sriperumputhur
+SRKL	Sirkali
+SRPT	Suryapet
+SRR	Shoranur
+STR	Sattur
+SUU	Sulur
+SVKT	Sivakasi Town
+SVPR	Srivillipudur
+TBM	Tambaram
+TCH	Tiruchengode
+TCN	Tuticorin
+TCR	Trichur
+TCTR	Trichur TR
+TENJ	Tirunelveli Junction
+TENP	Tirunelveli Palayankottai
+TENV	Tirunelveli Vannarpet
+TJR	Tanjore
+TLI	Tenali
+TLY	Thalassery
+TMK	Tumkur
+TNI	Theni
+TNTR	Tirunelveli TR
+TPR	Tiptur
+TPTI	Thirupathi
+TRIP	Trichy IbrakimPark
+TRK	Tirukoilur
+TRPR	Thirupathur
+TRR	Thuraiyur
+TRTB	Trichy Tiruverumbur
+TRTN	Trichy Thillainagar
+TRTR	Trichy TR
+TRYB	Trichy Bazaar
+TRYC	Trichy Contonment
+TSI	Tenkasi
+TTP	Thiruthuraipoondi
+TUPN	Tiurppur North
+TUPS	Tiruppur South
+TUPTR	Tiruppur TR
+TVLA	Thiruvella
+TVLI	Tiruvannamalai
+TVM	Tindivanam
+TVPM	Thiruvananthapuram
+TVR	Tiruvarur
+UDT	Udumalpet
+ULPT	Ulundurpet
+UTK	Uthankarai
+VBD	Vaniyambadi
+VDK	Vadakara
+VDLR	Vadaloor
+VJTR	Vijayawada TR
+VJWT	Vijayawada Town
+VLK	Vellakoil
+VLRN	Vellore North
+VLRS	Vellore South
+VLRTR	Vellore TR
+VNR	Virudhunagar
+VPM	Villupuram
+VPMTR	Villupuram TR
+VRI	Virudhachalam
+WJPT	Walajapet
+WNW	Wandawasi

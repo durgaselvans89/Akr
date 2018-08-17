@@ -1,0 +1,67 @@
+<project name="AKR" default="jar" basedir=".">
+
+	<property name="src" location="..\src" />
+	<property name="lib" location="..\lib" />
+	<property name="dist" location="..\dist" />
+
+	<path id="dist.classpath">
+		<pathelement path="${build}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init" depends="clean">
+		<tstamp />
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+
+	<target name="compile" depends="init" description="compile the source">
+		<javac srcdir="${src}" destdir="${build}" classpathref="dist.classpath" source="1.5" debug="on" />
+		<copy todir="${build}">
+			<fileset dir="${src}">
+				      <include name="**/*.class"/>
+					  <include name="**/*.properties"/>
+					  <include name="**/*.PNG"/>
+					  <include name="**/*.jrxml"/>
+				      <include name="**/*.jpg"/>
+				      <include name="**/*.JPG"/>
+					  <include name="**/*.png"/>
+		    </fileset>
+	   </copy>
+	</target>
+
+	<target name="jar" depends="compile" description="create the jar">
+	
+		<fileset dir="${lib}" id="lib.dist.fileset">
+			<include name="**/*.jar" />
+		</fileset>
+		 
+		  
+		<pathconvert pathsep=" " property="dist.classpath" refid="lib.dist.fileset">
+			<map from="${lib}" to=".\lib" />
+		</pathconvert>
+		
+		<!-- Put everything in ${build} into a jar file -->
+		<jar jarfile="..\dist\${ant.project.name}.jar">
+			<fileset dir="${build}" includes="**/*" />
+			<manifest>
+				<!-- SET YOUR MAIN CLASS HERE -->
+				<attribute name="Manifest-Version" value="1.0" /> 
+				<attribute name="Main-Class" value="hm.akr.workspace.MainWindow" />
+				<attribute name="Class-Path" value="${dist.classpath}" />
+			</manifest>
+		</jar>
+		
+	</target>
+
+	
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+	
+</project>

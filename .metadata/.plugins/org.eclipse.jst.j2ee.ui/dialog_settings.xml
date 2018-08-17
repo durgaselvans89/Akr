@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="false" key="J2EE_EXPORT_OVERWRITE"/>
+	<item value="false" key="J2EE_EXPORT_SOURCE"/>
+	<list key="J2EE_EXPORT_JST_EJB">
+		<item value="D:\AKR\Phase 3.0-3.5\beanchangedto 3.5\GoodsEJB.jar"/>
+		<item value="D:\AKR\Phase 3.0-3.5\beanchangedto 3.5\StationEJB.jar"/>
+		<item value="D:\AKR\Phase 3.0-3.5\beanchangedto 3.5\ReportingEJB.jar"/>
+	</list>
+</section>

@@ -1,0 +1,627 @@
+package hm.akr.container.lr;
+
+import hm.akr.common.BeanUtil;
+import hm.akr.dto.ArticleDTO;
+import hm.akr.dto.BookingDTO;
+import hm.akr.dto.CCProfileDTO;
+import hm.akr.dto.CardRateDTO;
+import hm.akr.dto.CardRateProfileDTO;
+import hm.akr.dto.ClientQuotationDTO;
+import hm.akr.dto.CustomerDTO;
+import hm.akr.dto.DistanceListDTO;
+import hm.akr.dto.LRNumberRangeDTO;
+import hm.akr.dto.LRTrackDTO;
+import hm.akr.dto.RegularSundryDTO;
+import hm.akr.dto.SpecialSundryDTO;
+import hm.akr.dto.StationsDTO;
+import hm.akr.dto.printer.BookingDTODecorator;
+import hm.akr.dto.printer.CardRateDTODecorator;
+import hm.akr.dto.printer.SOBDTODecorator;
+import hm.akr.interfaces.Goods;
+import hm.akr.interfaces.Reporting;
+
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Properties;
+
+import javax.ejb.CreateException;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
+/**
+ * 
+ */
+public class LRCompositeHandler {
+
+	BeanUtil beanutil = null;
+
+	Goods remote = null;
+
+	BookingDTO[] usedlrDTO = null;
+
+	private static final String JRXML_FILE = "hm/akr/resources/printer/LR.jrxml";
+
+	private static final String CARD_RATE_JRXML = "hm/akr/resources/printer/CARDRATE.jrxml";
+
+	Properties properties = null;
+
+	Context context = null;
+
+	/**
+	 * Constructor method
+	 * 
+	 * @throws Exception
+	 */
+	public LRCompositeHandler() throws Exception {
+
+		try {
+			beanutil = BeanUtil.getInstance();
+
+		} catch (Exception exception) {
+			throw exception;
+		}
+	}
+
+	/**
+	 * Method to book Parcel
+	 * 
+	 * @param booking
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean bookParcelForm(BookingDTO booking) throws Exception {
+		boolean status = false;
+		try {
+			if (null != beanutil) {
+				remote = beanutil.getGoodsBean();
+				remote.bookParcel(booking);
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw exception;
+		}
+		return status;
+	}
+
+	public void printCardRate(CardRateDTO[] dto, String from_station)
+			throws Exception {
+		HashMap hashMap = new HashMap();
+
+		hashMap.put("Title", "CARD RATE REPORT");
+		hashMap.put("FromStation", from_station);
+
+		ArrayList list = new ArrayList();
+
+		if (null != dto) {
+			int size = dto.length;
+			for (int i = 0; i < size; i++) {
+				list.add(new CardRateDTODecorator(dto[i]));
+			}
+		}
+		if (null != beanutil) {
+			beanutil.printData(list, CARD_RATE_JRXML, hashMap);
+		}
+	}
+
+	/**
+	 * 
+	 * @param dto
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public void printBookingDetails(BookingDTO dto, String fromStation,
+			String toStation, String articleType) throws Exception {
+		HashMap hashMap = new HashMap();
+		hashMap.put("ArticleType", articleType);
+
+		if (null != dto) {
+			System.out.println("RateYR" + dto.getRate_type());
+			if (dto.getRate_type() >= 7) {
+				dto.setType(dto.getType() + "**");
+			}
+		}
+		ArrayList list = new ArrayList();
+		list.add(new BookingDTODecorator(dto));
+
+		if (null != beanutil) {
+			beanutil.printData(list, JRXML_FILE, hashMap);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void printBookingDetails(BookingDTO dto) throws Exception {
+
+		HashMap hashMap = new HashMap();
+		hashMap.put("Title", "LR");
+
+		ArrayList list = new ArrayList();
+		list.add(new BookingDTODecorator(dto));
+
+		if (null != beanutil) {
+			beanutil.printData(list, JRXML_FILE, hashMap);
+		}
+	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 */
+	public BookingDTO getBookingDetail(String lrno) throws Exception {
+		BookingDTO dto = null;
+
+		try {
+			if (null != beanutil) {
+				remote = beanutil.getGoodsBean();
+				dto = remote.getBookingDetail(lrno, getStationCode(), BeanUtil.getDbName());
+			}
+
+		} catch (RemoteException remoteException) {
+			Exception exception = new Exception(
+					"Error occured while connecting to the server");
+			throw exception;
+		} catch (Exception exception) {
+			throw exception;
+		}
+		return dto;
+	}
+
+	/**
+	 * 
+	 * @param stationcode
+	 * @param isActingStation
+	 * @return
+	 * @throws Exception
+	 */
+	public RegularSundryDTO getSundryDetails(String stationcode)
+			throws Exception {
+		if (null != beanutil) {
+			return beanutil.getSundryDetails(stationcode, false);
+		}
+		return null;
+	}
+
+	/**
+	 * Method to get The Distance between Source And Destination
+	 * 
+	 * @param stationcode
+	 * @param isActingStation
+	 * @return
+	 * @throws RemoteException
+	 * @throws NamingException
+	 * @throws CreateException
+	 * @throws Exception
+	 */
+	public DistanceListDTO[] getDistance(String stationcode)
+			throws RemoteException, NamingException, CreateException, Exception {
+		if (null != beanutil) {
+			return beanutil.getDistanceList(stationcode, false);
+		}
+		return null;
+	}
+
+	/**
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean cancelBooking(String lrno, String cancelOption)
+			throws Exception {
+		boolean status = false;
+
+		try {
+			if (null != beanutil) {
+				remote = beanutil.getGoodsBean();
+				remote.cancelBooking(lrno, getStationCode(), cancelOption);
+				status = true;
+			}
+		} catch (Exception exception) {
+			throw exception;
+		}
+
+		return status;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getStationCode() {
+		return beanutil.getActingStationCode();
+	}
+
+	/**
+	 * 
+	 */
+	public boolean isAdminHead() {
+		return beanutil.isAdminHead();
+	}
+
+	/**
+	 * 
+	 */
+	public boolean isAdmin() {
+		return beanutil.isAdmin();
+	}
+
+	public boolean isAdminHeadStationary() {
+		return beanutil.isAdminHeadStationary();
+	}
+
+	/**
+	 * 
+	 */
+	public String getStationName() {
+		return beanutil.getActingStationName();
+	}
+
+	/**
+	 * Method to get Article Names
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public ArticleDTO[] getArticleTypes() throws Exception {
+		if (null != beanutil) {
+			try {
+				return beanutil.getArticleTypes();
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method to get All Stations
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public StationsDTO[] getStations() throws Exception {
+		if (null != beanutil) {
+			try {
+				return beanutil.getAvailableStations();
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return null;
+	}
+
+	public boolean isBranch(String stationCode) throws Exception {
+		StationsDTO[] dto = null;
+		if (null != beanutil) {
+			try {
+				dto = beanutil.getAvailableStations();
+				if (null != dto) {
+
+					int len = dto.length;
+					for (int i = 0; i < len; i++) {
+						if (stationCode.equalsIgnoreCase(dto[i]
+								.getBranch_code())) {
+							return true;
+						}
+					}
+				}
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return false;
+
+	}
+
+	public boolean isSameBranch(String branchCode, String stationCode)
+			throws Exception {
+		StationsDTO[] dto = null;
+		if (null != beanutil) {
+			try {
+				dto = beanutil.getAvailableStations();
+				if (null != dto) {
+
+					int len = dto.length;
+					for (int i = 0; i < len; i++) {
+						if (branchCode
+								.equalsIgnoreCase(dto[i].getBranch_code())
+								&& stationCode.equalsIgnoreCase(dto[i].getId())) {
+							return true;
+						}
+					}
+				}
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return false;
+
+	}
+
+	/**
+	 * Method to get LR Track Details
+	 * 
+	 * @param lrNo
+	 * @return
+	 * @throws Exception
+	 */
+	public LRTrackDTO[] trackLR(String lrNo) throws Exception {
+		LRTrackDTO[] dto = null;
+
+		try {
+			if (null != beanutil) {
+				remote = beanutil.getGoodsBean();
+				dto = remote.trackLRDetails(lrNo, BeanUtil.getDbName());
+			}
+
+		} catch (RemoteException remoteException) {
+			Exception exception = new Exception(
+					"Error occured while connecting to the server");
+			throw exception;
+		} catch (Exception exception) {
+			throw exception;
+		}
+		return dto;
+
+	}
+
+	/**
+	 * Method to find the station which is booked by another station
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getCreatedBy() throws Exception {
+		// TODO Auto-generated method stub
+		if (null != beanutil) {
+			try {
+				return beanutil.getCreatedBy();
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Method to get Allocated Range of Numbers
+	 * 
+	 * @param refresh
+	 * @return
+	 * @throws Exception
+	 */
+	public LRNumberRangeDTO[] getAllocatedLrnumbers(boolean refresh)
+			throws Exception {
+
+		try {
+			if (null != beanutil) {
+
+				return beanutil.getLRRange(refresh);
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+			throw exception;
+
+		}
+		return null;
+	}
+
+	public BookingDTO[] getUsedLR(Date allocationDate) throws Exception {
+		String stationCode = null;
+		try {
+			if (null != beanutil) {
+				remote = beanutil.getGoodsBean();
+				stationCode = getStationCode();
+				usedlrDTO = remote
+						.getUsedLRNumbers(stationCode, allocationDate);
+			}
+
+		} catch (RemoteException remoteException) {
+			Exception exception = new Exception(
+					"Error occured while connecting to the server");
+			throw exception;
+		} catch (Exception exception) {
+			throw exception;
+		}
+
+		return usedlrDTO;
+	}
+
+	/**
+	 * Method to special sundry details
+	 * 
+	 * @param stationcode
+	 * @return
+	 * @throws Exception
+	 * 
+	 */
+	public SpecialSundryDTO[] getSpecialSundryDetails() throws Exception {
+		SpecialSundryDTO[] dto = null;
+		if (null != beanutil) {
+			dto = beanutil.getSpecialSundryDetails();
+		}
+		return dto;
+	}
+
+	/**
+	 * Method to get Quotation details
+	 * 
+	 * @param customername
+	 * @return
+	 * @throws Exception
+	 * @throws Exception
+	 */
+
+	public ClientQuotationDTO getQuotationDetails(String quotationID,
+			String tostation) throws Exception {
+		ClientQuotationDTO dto = null;
+		if (null != beanutil) {
+			dto = beanutil.getQuotationDetails(quotationID, tostation);
+		}
+		return dto;
+	}
+
+	public String getServerDate() {
+		return beanutil.getServerDate();
+	}
+
+	/**
+	 * Method to get Customer Details
+	 * 
+	 * @param fromstation
+	 * 
+	 * @param tostation
+	 * @return
+	 * @throws Exception
+	 */
+	public CustomerDTO[] getQuotationCustomers(String fromstation,
+			boolean isActingStation) throws Exception {
+		CustomerDTO[] dto = null;
+		if (null != beanutil)
+			dto = beanutil.getCustomers(fromstation, false);
+		return dto;
+	}
+
+	/**
+	 * 
+	 * @param stationcode
+	 * @param isActingStation
+	 * @return
+	 * @throws RemoteException
+	 * @throws NamingException
+	 * @throws CreateException
+	 * @throws Exception
+	 */
+	public DistanceListDTO[] getDistanceList(String stationcode)
+			throws RemoteException, Exception {
+		try {
+			return beanutil.getDistanceList(stationcode, false);
+		} catch (Exception e) {
+			throw e;
+		}
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public double[] getMeasurements() throws Exception {
+		double[] units = null;
+
+		units = beanutil.getMeasurements();
+
+		return units;
+	}
+
+	public CustomerDTO[] getBillingCustomers() throws Exception {
+		CustomerDTO[] dto = null;
+		if (null != beanutil)
+			dto = beanutil.getBillingCustomers();
+
+		return dto;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public CardRateProfileDTO[] getCardRateProfile() throws Exception {
+		CardRateProfileDTO[] dto = null;
+		if (null != beanutil)
+			dto = beanutil.getCardRateProfile();
+
+		return dto;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isBranch() {
+		return beanutil.isBranch();
+	}
+
+	/**
+	 * 
+	 * @param stationCode
+	 * @return
+	 * @throws Exception
+	 */
+	public String getBranch(String stationCode) throws Exception {
+		StationsDTO[] dto = null;
+		if (null != beanutil) {
+			try {
+				dto = beanutil.getAvailableStations();
+				if (null != dto) {
+
+					int len = dto.length;
+					for (int i = 0; i < len; i++) {
+						if (stationCode.equalsIgnoreCase(dto[i].getId())) {
+							return dto[i].getBranch_code();
+						}
+					}
+				}
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return null;
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public CCProfileDTO[] getCCDetails() throws Exception {
+		CCProfileDTO[] dto = null;
+		if (null != beanutil) {
+			try {
+				dto = beanutil.getCCDetails();
+
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return dto;
+
+	}
+
+	/**
+	 * 
+	 * @param code
+	 * @param tostation
+	 * @return
+	 * @throws CreateException
+	 * @throws NamingException
+	 * @throws RemoteException
+	 */
+	public int getSpecialDiscounter(String code, String toStation)
+			throws RemoteException, NamingException, CreateException, Exception {
+		remote = beanutil.getGoodsBean();
+		return remote.getSpecialDiscounter(code, toStation);
+
+	}
+
+	/**
+	 * 
+	 * @param customer
+	 * @return
+	 * @throws Exception 
+	 */
+	public float getRefundPerArticleForHLC(String customer) throws Exception {
+		float refund = 0;
+		if (null != beanutil) {
+			try {
+				refund = beanutil.getRefundPerArticleForHLC(customer);
+
+			} catch (Exception exception) {
+				throw exception;
+			}
+		}
+		return refund;
+
+	}
+}

@@ -1,0 +1,160 @@
+/**
+ * 
+ */
+package hm.akr.admin.salesquotation;
+
+import hm.akr.admin.workspace.AdminComposite;
+import hm.akr.common.FloatLimitValidation;
+import hm.akr.common.IUIConstants;
+import hm.akr.dto.OtherChargesDTO;
+import hm.akr.msb.TreeComposite;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+/**
+ * This code was edited or generated using CloudGarden's Jigloo
+ * SWT/Swing GUI Builder, which is free for non-commercial
+ * use. If Jigloo is being used commercially (ie, by a corporation,
+ * company or business for any purpose whatever) then you
+ * should purchase a license for each developer using Jigloo.
+ * Please visit www.cloudgarden.com for details.
+ * Use of Jigloo implies acceptance of these licensing terms.
+ * A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+ * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+ * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+ */
+/**
+ * @author user
+ *
+ */
+public class SalesOtherChargesPop extends Composite implements SelectionListener, IUIConstants {
+
+	private Shell shell;
+
+	private Composite composite;
+
+	private Text txtValue;
+
+	private Button btnSet;
+
+	private boolean isLRC;
+
+	public OtherChargesDTO[] otherChargesDTO = null;
+	
+	Display display;
+
+	/**
+	 * 
+	 */
+	public SalesOtherChargesPop(Shell shell, int swtValue, boolean isLRC) {
+		super(shell, swtValue);
+		this.shell = shell;
+		this.isLRC = isLRC;
+	}
+
+	public Composite loadComposite() throws Exception {
+	
+		shell.setBounds(300, 200, 350, 275);
+		shell.open();
+		
+
+		if (isLRC) {
+			shell.setText("LRC");
+		} else {
+			shell.setText("GSC");
+		}
+
+		composite = this.getShell();
+
+		Composite cptTree = new TreeComposite(composite, SWT.BORDER, 190).loadComposite();
+		cptTree.setBounds(10, 10, 200, 220);
+
+		txtValue = new Text(composite, SWT.BORDER);
+		txtValue.setBounds(220, 110, 50, 21);
+		txtValue.addVerifyListener(new FloatLimitValidation());
+
+		btnSet = new Button(composite, SWT.PUSH);
+		btnSet.setText("Set");
+		btnSet.setBounds(275, 110, 30, 21);
+		btnSet.addSelectionListener(this);
+		
+		if(shell != null){
+			shell.open();
+			Display display = shell.getDisplay();
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
+			}
+		}		
+		
+		return this;
+	}
+
+	@Override
+	public void widgetDefaultSelected(SelectionEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void widgetSelected(SelectionEvent arg0) {
+
+		System.out.println("LRC==>" + isLRC);
+		int len = 0;
+		String[] stations = null;
+
+		TreeComposite cptTree;
+		try {
+			cptTree = (TreeComposite) new TreeComposite(this, SWT.NONE, 300);
+			stations = cptTree.getSelectedMSBStation();
+			cptTree.clearTree();
+			
+			float value = 0;
+
+			if (stations != null)
+				len = stations.length;
+
+			if (len > 0) {
+				if(!txtValue.getText().equals("")){
+				otherChargesDTO = new OtherChargesDTO[len];
+				for (int i = 0; i < len; i++) {
+					value = 0;
+					otherChargesDTO[i] = new OtherChargesDTO();
+					otherChargesDTO[i].setStationCode(stations[i]);
+					if(isLRC){
+						
+						value = Float.parseFloat(txtValue.getText());						
+						otherChargesDTO[i].setLrCharge(value);
+						otherChargesDTO[i].setGsc(0);
+					}else{
+						otherChargesDTO[i].setLrCharge(0);						
+						value = Float.parseFloat(txtValue.getText());						
+						otherChargesDTO[i].setGsc(value);
+					}					
+				}
+				this.shell.close();
+				}else{
+					AdminComposite.display("Please Enter Value", STATUS_SUCCESS, SUCCESS_FONT_COLOR);					
+				}
+			}else{
+				AdminComposite.display("Please Select any station", STATUS_SUCCESS, SUCCESS_FONT_COLOR);	
+				return;
+			}
+			
+			
+			
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+
+	}
+
+}

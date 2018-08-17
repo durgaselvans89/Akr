@@ -1,0 +1,414 @@
+package hm.akr.admin.salesquotation;
+
+import hm.akr.admin.salesquotation.handler.SalesQuotationHandler;
+import hm.akr.admin.workspace.AdminComposite;
+import hm.akr.common.IUIConstants;
+import hm.akr.dto.QuotationDTO;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.TreeSet;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
+public class SalesQuotationApproveComposite extends Composite implements SelectionListener,
+SalesIQuotationConstants, IUIConstants {
+
+	private Label lblCustomer;
+	private Label lblStation;
+	private Label lblType;
+	private Combo cbCustomer;
+	private Combo cbStation;
+	private Label lblBookingType;
+	private Button btnExport;
+	private Button btnApprove;
+	private Text txtBookingType;
+	private Text txtType;
+	private SalesQuotationHandler handler = null;
+	private Text txtQuotationId;
+	private QuotationDTO[] quotList = null;
+	private String TYPE = "";
+	
+	private Canvas cvs;
+
+	public SalesQuotationApproveComposite(Composite parent, int style) {
+		super(parent, style);
+		try {
+			handler = new SalesQuotationHandler();
+		} catch (Exception e) {			
+			e.printStackTrace();
+		}
+	}
+
+	
+	public Composite loadComposite() throws Exception{
+		
+		this.setSize(484, 220);
+		
+		cvs = new Canvas(this, SWT.BORDER);
+		cvs.setBounds(24, 20, 384, 196);
+		
+		{
+			lblCustomer = new Label(cvs, SWT.NONE);
+			lblCustomer.setText("Customer");
+			lblCustomer.setBounds(201, 12, 70, 17);
+			//lblCustomer.setFont(LABLE_FONT);
+			//lblCustomer.setForeground(QUOTATION_COLOR);
+		}
+		{
+			lblStation = new Label(cvs, SWT.NONE);
+			lblStation.setText("Station");
+			lblStation.setBounds(36, 12, 67, 17);
+			//lblStation.setFont(LABLE_FONT);
+			//lblStation.setForeground(QUOTATION_COLOR);
+		}
+		{
+			lblType = new Label(cvs, SWT.NONE);
+			lblType.setText("Quotation Type");
+			lblType.setBounds(36, 82, 86, 19);
+			//lblType.setFont(LABLE_FONT);
+			//lblType.setForeground(QUOTATION_COLOR);
+		}
+
+		{
+			cbCustomer = new Combo(cvs, SWT.READ_ONLY);
+			cbCustomer.setBounds(201, 31, 170, 21);	
+			cbCustomer.addSelectionListener(this);
+		}
+
+		{
+			cbStation = new Combo(cvs, SWT.READ_ONLY);
+			cbStation.setBounds(36, 31, 120, 21);
+			cbStation.addSelectionListener(this);
+		}
+
+		{
+			txtType = new Text(cvs, SWT.BORDER);
+			txtType.setBounds(36, 102, 120, 21);
+			txtType.setEnabled(false);		
+			
+		}
+		{
+			lblBookingType = new Label(cvs, SWT.NONE);
+			lblBookingType.setText("Booking Type");
+			lblBookingType.setBounds(201, 82, 65, 20);
+		}
+		{
+			txtBookingType = new Text(cvs, SWT.BORDER);
+			txtBookingType.setBounds(201, 102, 170, 21);
+			txtBookingType.setEnabled(false);
+		}
+		{
+			btnApprove = new Button(cvs, SWT.PUSH | SWT.CENTER);
+			btnApprove.setText("Approve");
+			btnApprove.setBounds(281, 150, 63, 30);
+			btnApprove.addSelectionListener(this);
+		}
+
+		//HIDDEN
+		{
+			txtQuotationId = new Text(cvs, SWT.BORDER);
+			txtQuotationId.setBounds(350, 102, 120, 21);
+			txtQuotationId.setVisible(false);
+		}
+		{
+			btnExport = new Button(cvs, SWT.PUSH | SWT.CENTER);
+			btnExport.setText("Export to Excel");
+			btnExport.setBounds(150, 150, 120, 30);
+			btnExport.addSelectionListener(this);
+		}
+
+		try {
+			quotList = handler.getQuotationList();
+			populateStations();
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}		
+		
+		
+		
+		return this;
+	}
+	
+	@Override
+	public void widgetDefaultSelected(SelectionEvent arg0) {
+			
+	}
+
+	@Override
+	public void widgetSelected(SelectionEvent event) {
+		Object source = event.getSource();
+		
+		if(source == btnApprove){
+			try {
+				if(txtQuotationId != null && !txtQuotationId.getText().equals("")){
+					String stn = cbStation.getText();
+					handler.approveQuotation(txtQuotationId.getText());
+					AdminComposite.display("Quotation Approved Successfully", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+					
+					cbCustomer.removeAll();
+					//cbStation.setText("");
+					txtBookingType.setText("");
+					txtType.setText("");
+					txtQuotationId.setText("");
+					
+					cbStation.remove(stn);
+					String[] items = cbStation.getItems();
+					cbStation.removeAll();
+					Arrays.sort(items, String.CASE_INSENSITIVE_ORDER);
+					cbStation.setItems(items);
+				}
+				
+			} catch (Exception e) {		
+				AdminComposite.display("Quotation Approved Failed", STATUS_SUCCESS, SUCCESS_FONT_COLOR);				
+			}
+		}else if(source == cbStation){
+			AdminComposite.display("", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+			handleStationAction();
+		}else if(source == cbCustomer){
+			AdminComposite.display("", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+			handleCustomerAction();
+		}else if(source == btnExport){
+			AdminComposite.display("", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+			//
+			String customer = cbCustomer.getText();
+			String station = cbStation.getText();
+			if(!station.equals("")){
+			if(!customer.equals("")){
+				for(int i = 0; i < quotList.length; i++) {
+					if (customer.equalsIgnoreCase(quotList[i].getCustomerName())) {						
+						    try {
+						    	AdminComposite.display("Exporting...", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+								handler.printExcel(station, customer, quotList[i].getQuotationDetails());
+								
+								FileDialog dialog = new FileDialog(cvs.getShell(), SWT.SAVE);
+								dialog.setFilterExtensions(new String[] { "*.xls" });
+								dialog.setFilterNames(new String[] { "*.xls" });
+
+								//FileUpload fu = new FileUpload();
+								// wild
+								// cards
+								dialog.setFilterPath("WINDOWS/Desktop"); // Windows path
+								dialog.setFileName(customer);								
+								String filepath = dialog.open();
+
+								if (null != filepath) {
+									File df = new File(filepath);
+									File xl = new File("lib/QuotationRate.xls");
+									
+									if(xl.exists()){
+										//AdminComposite.display("Saving...", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+										copyFile(xl, df, dialog.getFileName());
+									}
+									
+									AdminComposite.display("Excel Saved Successfully", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+									
+									//String stn = cbStation.getText();
+									cbCustomer.removeAll();
+									//cbStation.setText("");
+									txtBookingType.setText("");
+									txtType.setText("");
+									txtQuotationId.setText("");
+									
+									//cbStation.remove(stn);
+									String[] items = cbStation.getItems();
+									cbStation.removeAll();
+									Arrays.sort(items, String.CASE_INSENSITIVE_ORDER);
+									cbStation.setItems(items);
+								}
+							} catch (Exception e) {								
+								e.printStackTrace();
+							}
+					}
+				}
+			}else{
+				AdminComposite.display("Please Select Customer", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+			}
+			}else{
+				AdminComposite.display("Please Select Station", STATUS_SUCCESS, SUCCESS_FONT_COLOR);
+			}
+		}
+		
+	}
+	
+	
+
+	public void copyFile(File source, File dest, String fileName) throws IOException{
+		 
+		   if(!dest.exists()){
+		  
+		    dest.createNewFile();
+		 
+		    }else{
+		    	/*MessageBox mb = new MessageBox(cvs.getShell(), SWT.ICON_WARNING
+		                | SWT.YES | SWT.NO);
+
+		            // We really should read this string from a
+		            // resource bundle
+		            mb.setMessage(fileName + " already exists. Do you want to replace it?");
+		            
+		            if(SWT.YES){
+		            	
+		            }*/
+
+		            // If they click Yes, we're done and we drop out. If
+		            // they click No, we redisplay the File Dialog
+		          //  done = mb.open() == SWT.YES;
+		    }
+		   
+		 InputStream in = null;
+		 
+		    OutputStream out = null;
+		 
+		    try{
+		 
+		     in = new FileInputStream(source);
+
+		        out = new FileOutputStream(dest);
+		 
+		      byte[] buf = new byte[1024];
+
+		        int len;
+		 
+		      while((len = in.read(buf)) > 0){
+		 
+		        out.write(buf, 0, len);
+
+		            }
+		   
+		     }
+		  
+		  finally{
+		 
+		     in.close();
+		 
+		           out.close();
+		 
+		        }
+		 
+		  }
+	
+	
+
+	/**
+	 * Method to populate the Customers
+	 */
+	private void populateStations() throws Exception{	
+		
+		TreeSet<String> set = new TreeSet<String>();
+		if(quotList != null){			
+			for(int i = 0; i < quotList.length; i++){				
+				set.add(quotList[i].getStationCode());
+			}			
+			
+			Iterator<String> itr = set.iterator();
+			while(itr.hasNext()){
+				cbStation.add(itr.next());
+			}			
+		}		
+	}
+	
+	/**
+	 * Method to handle customer
+	 * @throws Exception
+	 */
+	private void handleStationAction(){
+		String station = cbStation.getText();
+		
+		if(quotList != null){
+			try{
+				cbCustomer.removeAll();
+			for(int i = 0; i < quotList.length; i++){
+				if(station.equals(quotList[i].getStationCode())){
+					cbCustomer.add(quotList[i].getCustomerName());					
+				}
+			}
+			
+			String[] items = cbCustomer.getItems();
+			cbCustomer.removeAll();
+			Arrays.sort(items, String.CASE_INSENSITIVE_ORDER);
+			cbCustomer.setItems(items);
+			
+			txtBookingType.setText("");
+			txtType.setText("");
+			txtQuotationId.setText("");
+			}catch(Exception exception){
+				exception.printStackTrace();
+			}
+		}
+	}
+
+	private void handleCustomerAction() {
+		String customer = cbCustomer.getText();
+		String type = "";
+		if(!customer.equals("")){
+			for (int i = 0; i < quotList.length; i++) {
+				if (customer.equalsIgnoreCase(quotList[i].getCustomerName())) {
+					
+					//Booking Type
+					if (quotList[i].isInward()){
+						txtBookingType.setText(INWARD_TYPE);
+					}else{
+						txtBookingType.setText(OUTWARD_TYPE);
+					}
+					
+					// Quotation Type
+					type = findTypeName(quotList[i].getType());
+					txtType.setText(type);					
+					
+					// Hidden QId
+					txtQuotationId.setText(quotList[i].getId());
+					
+					//System.out.println("QID==>"+txtQuotationId.getText());
+					
+					break;
+				}
+			}
+		}
+			
+	}
+	
+	/**
+	 * Method to find Quotation Type Name
+	 * @param selectionIndex
+	 * @return
+	 */
+	private String findTypeName(byte selectionIndex) {
+		if (selectionIndex == 0) {
+			TYPE = WEIGHT_BASED;
+		} else if (selectionIndex == 1) {
+			TYPE = ARTICLE_BASED;
+		} else {
+			TYPE = MIXED_ARTICLE;
+		}
+		return TYPE;
+	}	
+
+}

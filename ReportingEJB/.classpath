@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="ejbModule"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry exported="true" kind="lib" path="D:/AKR/AdminModule/lib/javaee.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/AKR/AdminModule/lib/javassist.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>

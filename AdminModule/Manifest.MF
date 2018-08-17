@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Main-Class: hm.akr.admin.workspace.AdminMain
+Class-Path: lib/org.eclipse.swt.win32.win32.x86_3.3.3.v3349.jar lib/CashEJB.jar lib/commons-beanutils-1.7.jar lib/commons-collections-2.1.jar
+  lib/commons-digester-1.8.jar lib/commons-javaflow-20060411.jar lib/commons-logging-1.0.2.jar lib/commons-logging-api-1.0.2.jar
+ lib/CustomerEJB.jar lib/GoodsEJB.jar lib/itext-1.3.1.jar lib/jasperreports-3.0.0.jar lib/jasperreports-3.0.0-applet.jar
+ lib/jasperreports-3.0.0-javaflow.jar lib/poi-2.5.1.jar lib/javaee.jar lib/javassist.jar lib/jbossall-client.jar lib/jboss-client.jar
+ lib/jboss-serialization.jar lib/jdt-compiler-3.1.1.jar lib/jnp-client.jar lib/ReportingEJB.jar lib/SecurityEJB.jar 
+ lib/StationEJB.jar lib/SundryEJB.jar lib/CommissionEJB.jar lib/UserEJB.jar lib/VehicleEJB.jar lib/CustomerEJB.jar lib/pop3.jar lib/smtp.jar lib/mailapi.jar lib/imap.jar lib/dsn.jar
+ lib/org.eclipse.equinox.common_3.3.0.v20070426.jar lib/org.eclipse.ui.forms_3.3.0.v20070511.jar lib/GoodsEJB.jar lib/QuotationEJB.jar lib/xalan.jar lib/tools.jar lib/xml-apis.jar 
+ 
